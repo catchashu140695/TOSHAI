@@ -23,6 +23,14 @@ $(document).ready(function () {
         }
     });
 
+    $('#MicBtn').click(function(){
+        eel.playAssistantSound();
+        eel.takecommand();
+        $('#Oval').attr('hidden',true);
+        $('#SiriWave').attr('hidden',false);
+
+    });
+
 });
 
 var siriWave = new SiriWave({
