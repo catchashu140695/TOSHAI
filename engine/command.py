@@ -4,6 +4,7 @@ import speech_recognition as sr #speech recognition audio to text
 import eel
 from engine.features import *
 from engine.config import Assistant_Name
+import time
 
 
 @eel.expose()
@@ -49,7 +50,9 @@ def allCommand():
         speak("opening "+command)     
         openCommand(query)        
     else:
-        print("Unable to understand !!!")
+        eel.DisplayMessage("I'm sorry, I didn't understand your message.")
+        speak("I'm sorry, I didn't understand your message.")
+    time.sleep(3)
     eel.DisplayMessage('')
     eel.showhood()
         
