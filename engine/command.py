@@ -16,24 +16,21 @@ def speak(text):
     """Saving Voice to a file"""
     # On linux make sure that 'espeak' and 'ffmpeg' are installed
     #engine.save_to_file('Hello World', 'test.mp3')
-    print(voices)
+    
     engine.say(text)
     engine.runAndWait()
     
-
-@eel.expose()
+    
 def takecommand():
     r=sr.Recognizer()
     with sr.Microphone() as source:
-        playAssistantSound()
-        print("I am listening......")
+        playAssistantSound()       
         eel.DisplayMessage('I am listening......')
         r.pause_threshold=1
         r.adjust_for_ambient_noise(source)
         audio=r.listen(source,10,6)
         
-    try:
-        print("recognizing....")  
+    try:       
         eel.DisplayMessage('recognizing....')
         query = r.recognize_google(audio,language="en-in")       
         eel.DisplayMessage(query)        
@@ -46,10 +43,17 @@ def takecommand():
 def allCommand():
     query=takecommand();
     eel.DisplayMessage(query)
-    if "open" in query:        
-        openCommand(query)
+    if "open" in query: 
+        command=query.replace(Assistant_Name,"")
+        command=query.replace("open","")  
+        speak("opening "+command)     
+        openCommand(query)        
     else:
         print("Unable to understand !!!")
+    eel.DisplayMessage('')
+    eel.showhood()
+        
+
 
 
 

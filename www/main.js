@@ -39,7 +39,7 @@ var siriWave = new SiriWave({
     height: 200,
     style: "ios9",
     amplitude: "1",
-    speed: "1",
+    speed: "0.30",
     autostart: true,
     width: 800
 });
