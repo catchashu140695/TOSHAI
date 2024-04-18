@@ -20,10 +20,8 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="assets/vendor/texllate/animate.css" />
   <link rel="stylesheet" href="style.css" />
-
   <title>TOSH AI</title>
 </head>
-
 <body>
   <div class="container">
     <section id="Oval" class="mb-4">
@@ -43,12 +41,11 @@
           <h5 class="text-light text text-center">Ask me anything ?</h5>
           <div class="col-md-12 mt-4 pt-4">
             <div class="text-center">
-              <div class="d-flex" id="TextInput">
+              <div class="d-flex text-white" id="TextInput">
                 <input type="text" class="input-field" name="chatbox" id="chatbox" placeholder="Enter prompt here...">
                 <button id="MicBtn" class="glow-on-hover"><i class="bi bi-mic-fill"></i></button>
                 <button id="ChatBtn" class="glow-on-hover"><i class="bi bi-chat-dots-fill"></i></button>
                 <button id="SettingsBtn" class="glow-on-hover"><i class="bi bi-gear-fill"></i></button>
-
               </div>
             </div>
           </div>
@@ -62,10 +59,9 @@
           <div class="col-md-12">
             <div class="d-flex justify-content-center align-items-center" style="height:100vh;">
               <div class="">
-                <p class="text-start text-light mb-4 siri-message">Hello, I am Tosh.</p>
+                <p class="text-start text-light mb-4 siri-message"></p>
                 <div id="siri-container"></div>
               </div>
-
             </div>
           </div>
         </div>
@@ -87,7 +83,7 @@
   <script src="assets/vendor/texllate/jquery.fittext.js"></script>
   <script src="assets/vendor/texllate/jquery.lettering.js"></script>
   <script src="main.js"></script>
+  <script src="controller.js"></script>
   <script src="/eel.js"></script>
 </body>
-
 </html>

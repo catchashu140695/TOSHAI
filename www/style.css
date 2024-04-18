@@ -94,7 +94,7 @@ body {
     box-shadow: 0 0 20px rgb(25, 0, 255);
     border-radius: 8px;
     color: white;
-    padding: 3px 0 3px 20px;
+    padding: 3px 10px 3px 10px;
     margin: 0 20%;
 
 }
@@ -113,7 +113,7 @@ body {
     height: 35px;
     border: none;
     outline: none;
-    columns: #fff;
+    color: #fff;
     background-color: #111;
     cursor: pointer;
     position: relative;
@@ -140,11 +140,18 @@ body {
     transition: opacity .3s ease-in-out;
     border-radius: 10px;
 }
-
+.glow-on-hover:hover{
+   background-color: #48ff00;
+   color: black;
+}
 .glow-on-hover:active {
     color: #181818a8;
 }
 
 .glow-on-hover:active:after {
     background: transparent;
+}
+
+.siri-message{
+    font-size: 25px;
 }

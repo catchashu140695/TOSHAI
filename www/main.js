@@ -23,11 +23,11 @@ $(document).ready(function () {
         }
     });
 
-    $('#MicBtn').click(function(){
-        eel.playAssistantSound();
-        eel.takecommand();
+    $('#MicBtn').click(function(){       
+        
         $('#Oval').attr('hidden',true);
         $('#SiriWave').attr('hidden',false);
+        eel.takecommand();
 
     });
 
@@ -39,7 +39,7 @@ var siriWave = new SiriWave({
     height: 200,
     style: "ios9",
     amplitude: "1",
-    speed: "0.30",
+    speed: "1",
     autostart: true,
     width: 800
 });
