@@ -2,6 +2,9 @@ from playsound import playsound
 import eel
 from engine.config import Assistant_Name
 import os
+import pywhatkit as kit
+import re
+
 
 
 
@@ -18,4 +21,9 @@ def openCommand(query):
         os.system("start "+ command.lower())
     else:
         print("No App Found !!!")
+        
+def PlayYoutube(search_term):    
+    kit.playonyt(search_term)
+    
+
     
