@@ -1,7 +1,10 @@
+import os
 import pyttsx3  #text-to-speech
 import speech_recognition as sr #speech recognition audio to text
 import eel
 from engine.features import *
+from engine.config import Assistant_Name
+
 
 @eel.expose()
 def speak(text):
@@ -32,15 +35,24 @@ def takecommand():
     try:
         print("recognizing....")  
         eel.DisplayMessage('recognizing....')
-        query = r.recognize_google(audio,language="en-in")
-        print("User said:",{query})
-        eel.DisplayMessage(query)
-        speak(query)
-        eel.DisplayMessage('')
-        eel.showhood()
+        query = r.recognize_google(audio,language="en-in")       
+        eel.DisplayMessage(query)        
     except Exception as e:
         return ""  
     
     return query.lower()
+
+@eel.expose
+def allCommand():
+    query=takecommand();
+    eel.DisplayMessage(query)
+    if "open" in query:        
+        openCommand(query)
+    else:
+        print("Unable to understand !!!")
+
+
+
+
 
 
