@@ -42,24 +42,25 @@ def takecommand():
 
 @eel.expose
 def allCommand():
-    query=takecommand();
-    eel.DisplayMessage(query)
-    if "open" in query: 
-        command=query.replace(Assistant_Name,"")
-        command=query.replace("open","")  
-        speak("opening "+command)     
-        openCommand(query)
-    elif "on youtube" in query:
-        search_term=extract_yt_term(query)
-        speak("Playing "+ search_term + " on youtube.")
-        PlayYoutube(search_term)
+    try:
+        query=takecommand();
+        eel.DisplayMessage(query)
+        if "open" in query: 
+            command=query.replace(Assistant_Name,"")
+            command=query.replace("open","")        
+            openCommand(command)
+        elif "on youtube" in query:
+            search_term=extract_yt_term(query)        
+            PlayYoutube(search_term)
 
-    else:
-        eel.DisplayMessage("I'm sorry, I didn't understand your message.")
-        speak("I'm sorry, I didn't understand your message.")
-    time.sleep(3)
-    eel.DisplayMessage('')
-    eel.showhood()
+        else:
+            eel.DisplayMessage("I'm sorry, I didn't understand your message.")
+            speak("I'm sorry, I didn't understand your message.")
+        time.sleep(3)
+        eel.DisplayMessage('')
+        eel.showhood()
+    except:
+        speak("something went wrong !!!")
     
 def extract_yt_term(command):
     pattern=r'play\s+(.*?)\s+on\s+youtube'
