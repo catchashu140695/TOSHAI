@@ -7,6 +7,11 @@ import re
 import sqlite3
 import pyttsx3
 import webbrowser
+import pvporcupine
+import pyaudio
+import struct
+import time
+import pyautogui as autogui
 
 
 conn=sqlite3.connect("jarvis.db")
@@ -68,5 +73,52 @@ def PlayYoutube(search_term):
     speak("Playing "+ search_term + " on youtube.")   
     kit.playonyt(search_term)
     
-
     
+def hotword():
+    """
+    Listens for specific hotwords ("jarvis" and "alexa") and performs an action
+    when one of them is detected (e.g., pressing Windows key + J).
+    """
+    porcupine = None
+    paud = None
+    audio_stream = None
+
+    try:
+        # Pretrained keywords
+        porcupine = pvporcupine.create(keywords=["jarvis", "alexa"])
+        paud = pyaudio.PyAudio()
+        audio_stream = paud.open(rate=porcupine.sample_rate,
+                                 channels=1,
+                                 format=pyaudio.paInt16,
+                                 input=True,
+                                 frames_per_buffer=porcupine.frame_length)
+
+        while True:
+            keyword = audio_stream.read(porcupine.frame_length)
+            keyword = struct.unpack_from("h" * porcupine.frame_length, keyword)
+
+            keyword_index = porcupine.process(keyword)
+
+            if keyword_index >= 0:
+                print("Hotword detected")
+                autogui.keyDown("win")
+                autogui.press("j")
+                time.sleep(2)
+                autogui.keyUp("win")
+
+    except KeyboardInterrupt:
+        # Handle Ctrl+C
+        print("Interrupted by user")
+
+    except Exception as e:
+        # Handle specific exception during PyAudio operation
+        print("Error:", e)
+
+    finally:
+        # Clean up resources
+        if porcupine is not None:
+            porcupine.delete()
+        if audio_stream is not None:
+            audio_stream.close()
+        if paud is not None:
+            paud.terminate()

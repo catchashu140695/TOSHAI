@@ -5,6 +5,7 @@ import eel
 from engine.features import *
 from engine.config import Assistant_Name
 import time
+from engine.chatgpt import chatgpt
 
 
 @eel.expose()
@@ -33,7 +34,8 @@ def takecommand():
         
     try:       
         eel.DisplayMessage('recognizing....')
-        query = r.recognize_google(audio,language="en-in")       
+        query = r.recognize_google(audio,language="en-in")  
+        print("After hearing : " + query)     
         eel.DisplayMessage(query)        
     except Exception as e:
         return ""  
@@ -52,7 +54,12 @@ def allCommand():
         elif "on youtube" in query:
             search_term=extract_yt_term(query)        
             PlayYoutube(search_term)
-
+        elif "write" in query:
+            command=query.replace(Assistant_Name,"")
+            command=query.replace("using openai","")     
+            res=chatgpt.chatgpt3(command)
+            eel.DisplayMessage(res)
+            speak(res)
         else:
             eel.DisplayMessage("I'm sorry, I didn't understand your message.")
             speak("I'm sorry, I didn't understand your message.")
