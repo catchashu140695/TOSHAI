@@ -30,24 +30,21 @@ class chatgpt:
         inputElement = driver.find_element(By.ID, "prompt-textarea")
 
         # Type in the search
-        inputElement.send_keys(prompt)
-        
+        inputElement.send_keys(prompt)       
 
         # Submit the form (although google automatically searches now without submitting)
         inputElement.send_keys(Keys.RETURN)
         
-        time.sleep(3)
-
-        
+        time.sleep(2)       
         
         while True:
             output = driver.find_element(By.CLASS_NAME, "markdown").text
-            time.sleep(3)
+            time.sleep(2)
             if  driver.find_element(By.CLASS_NAME, "markdown").text == output:
                 break
             else:                
                 output=driver.find_element(By.CLASS_NAME, "markdown").text
-                time.sleep(3)          
+                time.sleep(2)          
         
         
         # Close the browser

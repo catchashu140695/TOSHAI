@@ -12,7 +12,7 @@ from engine.chatgpt import chatgpt
 def speak(text):
     engine = pyttsx3.init("sapi5")
     voices = engine.getProperty('voices')
-    engine.setProperty('voice', voices[1].id)
+    engine.setProperty('voice', voices[0].id)
     engine.setProperty('volume',1.0)
     engine.setProperty('rate', 174)
     """Saving Voice to a file"""
@@ -60,14 +60,17 @@ def allCommand():
             res=chatgpt.chatgpt3(command)
             eel.DisplayMessage(res)
             speak(res)
+        elif "upload news" in query:  
+            speak("Sir, News will be uploaded to your youtube channel. I will notify you with status for this process.")                     
+            NewsAutomation()
         else:
             eel.DisplayMessage("I'm sorry, I didn't understand your message.")
             speak("I'm sorry, I didn't understand your message.")
-        time.sleep(3)
+        time.sleep(2)
         eel.DisplayMessage('')
         eel.showhood()
-    except:
-        speak("something went wrong !!!")
+    except Exception as e:
+        speak("something went wrong " + e)
     
 def extract_yt_term(command):
     pattern=r'play\s+(.*?)\s+on\s+youtube'
