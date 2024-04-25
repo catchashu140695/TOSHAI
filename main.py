@@ -2,7 +2,7 @@ import os
 import eel
 from engine.features import *
 from engine.command import *
-from engine.chatgpt import chatgpt
+
 
 def start():
     eel.init('www')    

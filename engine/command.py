@@ -1,3 +1,4 @@
+import json
 import os
 import pyttsx3  #text-to-speech
 import speech_recognition as sr #speech recognition audio to text
@@ -5,7 +6,8 @@ import eel
 from engine.features import *
 from engine.config import Assistant_Name
 import time
-from engine.chatgpt import chatgpt
+from engine.web_automations import web_automations
+
 
 
 @eel.expose()
@@ -45,7 +47,8 @@ def takecommand():
 @eel.expose
 def allCommand():
     try:
-        query=takecommand();
+        #query=takecommand();
+        query="upload shots"
         eel.DisplayMessage(query)
         if "open" in query: 
             command=query.replace(Assistant_Name,"")
@@ -57,12 +60,23 @@ def allCommand():
         elif "write" in query:
             command=query.replace(Assistant_Name,"")
             command=query.replace("using openai","")     
-            res=chatgpt.chatgpt3(command)
+            res=web_automations.chatgpt3(command)
             eel.DisplayMessage(res)
             speak(res)
         elif "upload news" in query:  
             speak("Sir, News will be uploaded to your youtube channel. I will notify you with status for this process.")                     
             NewsAutomation()
+        elif "update shots table" in query:
+            while True:
+                speak("shorts upload sequence initiated.")
+                prompt="give 5  youtube title,description and tags for generic funny youtube shorts (not specific topic) in json format that you have never created before where the keys will be title,description and tags. give the tags '#' initiated and space separated. Also add #shorts #youtube #youtubeshorts to every"
+                res=web_automations.chatgpt3(prompt)       
+                res1=push_shorts_title_desc_tags(res)
+                if res1=="1":
+                    speak("successfully inserted to database")
+                else:
+                    speak("Failure inserrting to database.")                
+            
         else:
             eel.DisplayMessage("I'm sorry, I didn't understand your message.")
             speak("I'm sorry, I didn't understand your message.")
@@ -70,12 +84,16 @@ def allCommand():
         eel.DisplayMessage('')
         eel.showhood()
     except Exception as e:
-        speak("something went wrong " + e)
+        print("Error Messsage" + e)
     
 def extract_yt_term(command):
     pattern=r'play\s+(.*?)\s+on\s+youtube'
     match=re.search(pattern,command,re.IGNORECASE)
     return match.group(1) if match else None
+
+
+    
+    
     
         
 

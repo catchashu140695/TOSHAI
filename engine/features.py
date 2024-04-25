@@ -4,7 +4,6 @@ import eel
 import os
 import pywhatkit as kit
 import re
-import sqlite3
 import pyttsx3
 import webbrowser
 import pvporcupine
@@ -13,14 +12,17 @@ import struct
 import time
 import pyautogui as autogui
 import json
-import pyodbc
 from newsapi import NewsApiClient
 from datetime import datetime, timedelta
+import sqlite3
+import pyodbc
 
 
 
-conn=sqlite3.connect("jarvis.db")
-cursor=conn.cursor()
+
+sqlliteconn=sqlite3.connect("jarvis.db")
+sqllitecursor=sqlliteconn.cursor()
+sql_con = pyodbc.connect('DRIVER={SQL Server};SERVER=TOSHWORKSTATION\SQLEXPRESS;DATABASE=ToshAI;Trusted_Connection=yes;')
 
 
 @eel.expose()
@@ -28,7 +30,7 @@ def playAssistantSound():
     opening_sound="www\\assets\\audio\\siri_start.MP3"
     playsound(opening_sound)
 
-def print(text):
+def speak(text):
     engine = pyttsx3.init("sapi5")
     voices = engine.getProperty('voices')
     engine.setProperty('voice', voices[0].id)
@@ -41,11 +43,7 @@ def print(text):
     engine.say(text)
     engine.runAndWait()
     
-def hotword():
-    """
-    Listens for specific hotwords ("jarvis" and "alexa") and performs an action
-    when one of them is detected (e.g., pressing Windows key + J).
-    """
+def hotword():    
     porcupine = None
     paud = None
     audio_stream = None
@@ -66,23 +64,19 @@ def hotword():
 
             keyword_index = porcupine.process(keyword)
 
-            if keyword_index >= 0:
-                # print("Hotword detected")
+            if keyword_index >= 0:                
                 autogui.keyDown("win")
                 autogui.press("j")
                 time.sleep(2)
                 autogui.keyUp("win")
 
-    except KeyboardInterrupt:
-        # Handle Ctrl+C
-        print("Interrupted by user")
+    except KeyboardInterrupt:        
+        speak("Interrupted by user")
 
-    except Exception as e:
-        # Handle specific exception during PyAudio operation
-        print("Error:", e)
+    except Exception as e:        
+        speak("Error:", e)
 
-    finally:
-        # Clean up resources
+    finally:        
         if porcupine is not None:
             porcupine.delete()
         if audio_stream is not None:
@@ -96,53 +90,44 @@ def openCommand(query):
     app_name=query.lower().strip()    
     if app_name != "":
         try:
-            cursor.execute(
+            sqllitecursor.execute(
                 'select path from sys_command where name in (?)',(app_name,)
             )
-            results=cursor.fetchall()            
+            results=sqllitecursor.fetchall()            
             if(len(results)!=0):
-                print("opening " + query)
+                speak("opening " + query)
                 os.startfile(results[0][0])
             elif len(results) == 0:
-                cursor.execute(
+                sqllitecursor.execute(
                 'select url from web_command where name in (?)',(app_name,)
                 )
-                results=cursor.fetchall()
+                results=sqllitecursor.fetchall()
                 
                 if len(results) != 0:
-                     print("opening " + query)
+                     speak("opening " + query)
                      webbrowser.open(results[0][0])
                 else:
-                    print("opening " + query)
+                    speak("opening " + query)
                     try:
                         os.system("start " + query)
                     except:
-                        print("Not Found !!!")
+                        speak("Not Found !!!")
         except:
-            print("Something went wrong !!!")                
-                
-
+            speak("Something went wrong !!!")                
         
 def PlayYoutube(search_term): 
-    print("Playing "+ search_term + " on youtube.")   
+    speak("Playing "+ search_term + " on youtube.")   
     kit.playonyt(search_term)
-    
-    
-# Import necessary libraries
-from newsapi import NewsApiClient
-from datetime import datetime, timedelta
-import json
-import pyodbc
-
+ 
 def NewsAutomation():
-    newsapi = NewsApiClient(api_key="43cd03efd7434c8faddab5e95dbb60d")
+    newsapi = NewsApiClient(api_key="43cd03efd7434c8faddab5e95dbb60d8")
     categories = ["bollywood", "sports", "science"]
     # Calculate yesterday's date
     yesterday_date = datetime.now() - timedelta(days=1)
     yesterday_str = yesterday_date.strftime('%Y-%m-%d')
 
     for category in categories:
-        print("Now fetching " + category + " news.")
+        speak("Now fetching " + category + " news.")
         # Fetch articles from News API
         try:
             articles_response = newsapi.get_everything(q=category,
@@ -152,7 +137,7 @@ def NewsAutomation():
                                                        sort_by='relevancy',
                                                        )
         except Exception as e:
-            print(f"Failed to fetch articles: {str(e)}")
+            speak(f"Failed to fetch articles: {str(e)}")
             continue  # Use continue instead of exit to try next category
 
         # Convert response to JSON string
@@ -162,11 +147,10 @@ def NewsAutomation():
         data = json.loads(json_string)
 
         # Establish connection to SQL Server
-        try:
-            conn = pyodbc.connect('DRIVER={SQL Server};SERVER=TOSHWORKSTATION\SQLEXPRESS;DATABASE=ToshAI;Trusted_Connection=yes;')
-            cursor = conn.cursor()
+        try:           
+            cursor = sql_con.cursor()
         except Exception as e:
-            print(f"Failed to connect to the database: {str(e)}")
+            speak(f"Failed to connect to the database: {str(e)}")
             continue  # Use continue to attempt the next category
 
         # Iterate through articles and insert into database
@@ -185,14 +169,18 @@ def NewsAutomation():
                 cursor.execute("EXEC USP_NewsArticle ?,?,?,?,?,?,?,?,?", 
                                (source_name, author, title, description, url, url_to_image, published_at, content, category))
             except Exception as e:
-                print(f"Failed to insert article into database: {str(e)}")
+                speak(f"Failed to insert article into database: {str(e)}")
                 # Consider adding a rollback or other error handling here
 
         # Commit the transaction and close the cursor after all inserts
-        conn.commit()
+        sql_con.commit()
         cursor.close()
-        print(f"Success! News fetched and inserted into the database for {category}")
+        speak(f"Success! News fetched and inserted into the database for {category}")
 
-
+def push_shorts_title_desc_tags(json_data):
+    cursor = sql_con.cursor()   
+    cursor.execute("EXEC InsertShortsFromJson @jsonData=?", (json_data))
+    sql_con.commit()   
+    return "1"
     
   
