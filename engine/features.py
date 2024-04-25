@@ -16,9 +16,7 @@ from newsapi import NewsApiClient
 from datetime import datetime, timedelta
 import sqlite3
 import pyodbc
-
-
-
+from hugchat import hugchat
 
 sqlliteconn=sqlite3.connect("jarvis.db")
 sqllitecursor=sqlliteconn.cursor()
@@ -119,6 +117,15 @@ def PlayYoutube(search_term):
     speak("Playing "+ search_term + " on youtube.")   
     kit.playonyt(search_term)
  
+def chatbot(query):
+    user_input=query.lower()
+    chatbot=hugchat.ChatBot(cookie_path="engine\cookies.json")
+    id=chatbot.new_conversation()
+    chatbot.change_conversation(id)
+    response=chatbot.chat(user_input)
+    print(response)    
+    return response
+
 def NewsAutomation():
     newsapi = NewsApiClient(api_key="43cd03efd7434c8faddab5e95dbb60d8")
     categories = ["bollywood", "sports", "science"]

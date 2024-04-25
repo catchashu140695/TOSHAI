@@ -47,8 +47,8 @@ def takecommand():
 @eel.expose
 def allCommand():
     try:
-        #query=takecommand();
-        query="upload shots"
+        query=takecommand();
+        #query="upload shots"
         eel.DisplayMessage(query)
         if "open" in query: 
             command=query.replace(Assistant_Name,"")
@@ -57,19 +57,19 @@ def allCommand():
         elif "on youtube" in query:
             search_term=extract_yt_term(query)        
             PlayYoutube(search_term)
-        elif "write" in query:
-            command=query.replace(Assistant_Name,"")
-            command=query.replace("using openai","")     
-            res=web_automations.chatgpt3(command)
-            eel.DisplayMessage(res)
-            speak(res)
+        # elif "write" in query:
+        #     command=query.replace(Assistant_Name,"")
+        #     command=query.replace("using openai","")     
+        #     res=web_automations.chatgpt3(command)
+        #     eel.DisplayMessage(res)
+        #     speak(res)
         elif "upload news" in query:  
             speak("Sir, News will be uploaded to your youtube channel. I will notify you with status for this process.")                     
             NewsAutomation()
         elif "update shots table" in query:
             while True:
                 speak("shorts upload sequence initiated.")
-                prompt="give 5  youtube title,description and tags for generic funny youtube shorts (not specific topic) in json format that you have never created before where the keys will be title,description and tags. give the tags '#' initiated and space separated. Also add #shorts #youtube #youtubeshorts to every"
+                prompt="give 5 youtube title,description and tags for generic funny youtube shorts (not specific topic) in json format that you have never created before where the keys will be title,description and tags. give the tags '#' initiated and space separated. Also add #shorts #youtube #youtubeshorts to every"
                 res=web_automations.chatgpt3(prompt)       
                 res1=push_shorts_title_desc_tags(res)
                 if res1=="1":
@@ -78,13 +78,14 @@ def allCommand():
                     speak("Failure inserrting to database.")                
             
         else:
-            eel.DisplayMessage("I'm sorry, I didn't understand your message.")
-            speak("I'm sorry, I didn't understand your message.")
+            response=chatbot(query)   
+            eel.DisplayMessage(response)        
+            speak(response)
         time.sleep(2)
         eel.DisplayMessage('')
         eel.showhood()
     except Exception as e:
-        print("Error Messsage" + e)
+        print(e)
     
 def extract_yt_term(command):
     pattern=r'play\s+(.*?)\s+on\s+youtube'
