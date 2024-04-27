@@ -29,18 +29,17 @@ def takecommand():
     r=sr.Recognizer()
     with sr.Microphone() as source:
         playAssistantSound()       
-        eel.DisplayMessage('I am listening......')
+        eel.DisplayStatus('I am listening......')
         r.pause_threshold=1
         r.adjust_for_ambient_noise(source)
         audio=r.listen(source,10,6)
         
     try:       
-        eel.DisplayMessage('recognizing....')
-        query = r.recognize_google(audio,language="en-in")  
-        print("After hearing : " + query)     
-        eel.DisplayMessage(query)        
+        eel.DisplayStatus('recognizing....')
+        query = r.recognize_google(audio,language="en-in")            
+        eel.DisplayMessage(query,"User")        
     except Exception as e:
-        return ""  
+        return "" 
     
     return query.lower()
 
@@ -49,7 +48,7 @@ def allCommand():
     try:
         query=takecommand();
         #query="upload shots"
-        eel.DisplayMessage(query)
+        
         if "open" in query: 
             command=query.replace(Assistant_Name,"")
             command=query.replace("open","")        
@@ -78,9 +77,15 @@ def allCommand():
                     speak("Failure inserrting to database.")                
             
         else:
-            response=chatbot(query)   
-            eel.DisplayMessage(response)        
-            speak(response)
+            if(query!=""):                
+                response=chatbot(query)   
+                eel.DisplayMessage(str(response))        
+                speak(response)
+            else:
+                eel.DisplayStatus("Unable to understand !!!") 
+                time.sleep(3)
+                eel.showhood()
+                speak("Unable to understand")
         time.sleep(2)
         eel.DisplayMessage('')
         eel.showhood()

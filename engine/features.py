@@ -124,7 +124,7 @@ def chatbot(query):
     chatbot.change_conversation(id)
     response=chatbot.chat(user_input)
     print(response)    
-    return response
+    return str(response)
 
 def NewsAutomation():
     newsapi = NewsApiClient(api_key="43cd03efd7434c8faddab5e95dbb60d8")
@@ -158,7 +158,7 @@ def NewsAutomation():
             cursor = sql_con.cursor()
         except Exception as e:
             speak(f"Failed to connect to the database: {str(e)}")
-            continue  # Use continue to attempt the next category
+            continue  
 
         # Iterate through articles and insert into database
         for article in data['articles']:
