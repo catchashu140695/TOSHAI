@@ -76,21 +76,37 @@ class web_automations:
             file_input.send_keys(abs_path)
             time.sleep(7)
             
-            vid_title = bot.find_element(By.XPATH, '//*[@id="textbox"]')
+            vid_title = bot.find_element(By.XPATH, '/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/ytcp-video-metadata-editor-basics/div[1]/ytcp-video-title/ytcp-social-suggestions-textbox/ytcp-form-input-container/div[1]/div[2]/div/ytcp-social-suggestion-input/div')
+            for i in range(10):                
+                vid_title.send_keys(Keys.DELETE)
             vid_title.send_keys("Title working")
-            time.sleep(500)
+            
+            vid_description = bot.find_element(By.XPATH, '/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/ytcp-video-metadata-editor-basics/div[2]/ytcp-video-description/div/ytcp-social-suggestions-textbox/ytcp-form-input-container/div[1]/div[2]/div/ytcp-social-suggestion-input/div')
+            vid_description.send_keys("Description working")
+            
+            # vid_tags=bot.find_element(By.XPATH,'//*[@id="text-input"]')
+            # vid_tags.clear()
+            # vid_tags.send_keys("working , notworking")     
+            
+            
 
             
             print("Until this success !!!")
-            # next_button = bot.find_element(By.XPATH, '//*[@id="next-button"]')
-            # for i in range(3):
-            #     next_button.click()
-            #     time.sleep(1)
+            next_button = bot.find_element(By.XPATH, '//*[@id="next-button"]')
+            for i in range(3):
+                next_button.click()
+                time.sleep(1)
+            
+            public_button=bot.find_element(By.XPATH, '//*[@id="radioContainer"]')
+            public_button.click()
+            
+            
 
-            # done_button = bot.find_element(By.XPATH, '//*[@id="done-button"]')
-            # done_button.click()
-            # time.sleep(5)
-            bot.quit()
+            done_button = bot.find_element(By.XPATH, '//*[@id="done-button"]')
+            done_button.click()
+            time.sleep(180)
+    
+        bot.quit()
 
 
 

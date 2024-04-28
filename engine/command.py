@@ -19,8 +19,7 @@ def speak(text):
     engine.setProperty('rate', 174)
     """Saving Voice to a file"""
     # On linux make sure that 'espeak' and 'ffmpeg' are installed
-    #engine.save_to_file('Hello World', 'test.mp3')
-    
+    #engine.save_to_file('Hello World', 'test.mp3')    
     engine.say(text)
     engine.runAndWait()
     
@@ -46,9 +45,8 @@ def takecommand():
 @eel.expose
 def allCommand():
     try:
-        query=takecommand();
-        #query="upload shots"
-        
+        query=takecommand();            
+        eel.DisplayStatus('Analyzing......')
         if "open" in query: 
             command=query.replace(Assistant_Name,"")
             command=query.replace("open","")        
@@ -75,7 +73,9 @@ def allCommand():
                     speak("successfully inserted to database")
                 else:
                     speak("Failure inserrting to database.")                
-            
+        elif "upload youtube videos" in query:
+            res = web_automations.upload_youtube_shorts()
+            speak("shorts are successfully uploaded to youtube.")
         else:
             if(query!=""):                
                 response=chatbot(query)   
@@ -86,8 +86,7 @@ def allCommand():
                 time.sleep(3)
                 eel.showhood()
                 speak("Unable to understand")
-        time.sleep(2)
-        eel.DisplayMessage('')
+        time.sleep(2)        
         eel.showhood()
     except Exception as e:
         print(e)

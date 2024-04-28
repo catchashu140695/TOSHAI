@@ -41,6 +41,10 @@ def speak(text):
     engine.say(text)
     engine.runAndWait()
     
+@eel.expose("killprocess")
+def killprocess():
+    speak("")
+
 def hotword():    
     porcupine = None
     paud = None

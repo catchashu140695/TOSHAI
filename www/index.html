@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -119,12 +118,8 @@
       }
     }
   </style>
-
-
 </head>
-
 <body>
-
   <div id="loader">
     <img src="assets/img/loader.gif" alt="Loading...">
   </div>
@@ -161,7 +156,9 @@
             <div class="card-header">
               <div class="row">
                 <div class="col-md-6 text-left"><span>Ask me Anything ?</span></div>
-                <div class="col-md-6 text-right"><button class="btn btn-info btn-sm">New Chat</button></div>
+                <div class="col-md-6 text-right">                  
+                  <button class="btn btn-info btn-sm" onclick="killprocess()">New Chat</button>
+                </div>
               </div>
             </div>
             <div class="card-body siri-message" style="overflow-y: scroll;">
@@ -261,6 +258,16 @@
         $('#loader').hide();
         $('#content').show(); // Show the content
       });
+
+      function killprocess()
+      {
+        eel.killprocess();
+        window.location.reload();
+
+      }
+
+
+
     });
 
 
